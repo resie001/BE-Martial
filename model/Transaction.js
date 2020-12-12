@@ -1,28 +1,25 @@
 const mongoose = require('mongoose'); // Erase if already required
+const { chatSchema } = require('./Chat');
 
 // Declare the Schema of the Mongo model
-var userSchema = new mongoose.Schema({
-    name:{
+var transactionSchema = new mongoose.Schema({
+    status :{
         type:String,
-        required:true,
-        unique:true,
-        index:true,
+        required:true
     },
-    email:{
-        type:String,
-        required:true,
-        unique:true,
-    },
-    mobile:{
-        type:String,
-        required:true,
-        unique:true,
-    },
-    password:{
-        type:String,
+    patient_id:{
+        type:mongoose.Schema.Types.ObjectId,
         required:true,
     },
+    doctor_id:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+    },
+    chat:[chatSchema]
 });
 
 //Export the model
-module.exports = mongoose.model('User', userSchema);
+module.exports = {
+    transactionModel : mongoose.model('Transaction', transactionSchema),
+    transactionSchema : transactionSchema
+};
