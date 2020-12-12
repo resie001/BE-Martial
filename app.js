@@ -4,10 +4,30 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+//Addition - Purusadi
+var mongoose = require('mongoose');
+var Drugs = require("./models/drugModel")
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+//Additional Router
+var drugRouter = require('./routes/drugRouter');
 
 var app = express();
+
+// Koneksi
+var url = "mongodb://127.0.0.1:27017/proyek1";
+var connect = mongoose.connect(url);
+
+// Tangkap hasil koneksi
+connect.then(
+  (db) => {
+    console.log("Koneksi Sukses!");
+  },
+  (err) => {
+    console.log("Terjadi Kegagalan Koneksi");
+  }
+);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -21,6 +41,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+//Additional app.use
+app.use('/drug', drugRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
