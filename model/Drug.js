@@ -7,9 +7,11 @@ var drugSchema = new mongoose.Schema({
         unique:true,
         index:true,
     }
+},{
+    versionKey:false
 });
 const drugModel = mongoose.model('Drug', drugSchema);
 module.exports = {
-    drug : drugModel,
-    schema : drugSchema
+    drugModel : drugModel,
+    drugSchema : drugSchema
 }

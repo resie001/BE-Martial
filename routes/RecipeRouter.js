@@ -1,7 +1,7 @@
 const bodyParser = require('body-parser');
 var express = require('express');
-const {Recipe} = require('../model/Recipe')
-const {drug} = require('../model/Drug')
+const {recipeModel} = require('../model/Recipe')
+const {drugModel} = require('../model/Drug')
 var router = express.Router();
 router.use(bodyParser.json())
 
@@ -12,8 +12,10 @@ router.route("/")
       
     })
     .post((req,res,next)=>{
-      drug.create(req.body).then((drug)=>{
+      recipeModel.create(req.body).then((recipe)=>{
         console.log("Created Drug : "+drug);
+        res.statusCode = 200
+        res.send("Created Drug : "+drug)
       })
     })
     .put((req,res,next)=>{
