@@ -17,7 +17,7 @@ var ratingSchema = new mongoose.Schema({
         required:true,
         default:""
     }
-});
+},{timestamps:true});
 
 //Export the model
 module.exports = {
