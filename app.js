@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/Recipes');
+var usersRouter = require('./routes/RecipeRouter');
 
 var app = express();
 

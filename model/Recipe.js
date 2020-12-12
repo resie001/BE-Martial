@@ -14,7 +14,10 @@ var recipeSchema = new Schema({
     timestamps:true
 });
 
-module.exports = mongoose.model('Recipe', recipeSchema);
+module.exports = {
+    recipeModel :  mongoose.model('Recipe', recipeSchema),
+    recipeSchema : recipeSchema
+};
 
 // {
 //     "_id":1,
