@@ -21,8 +21,7 @@ var doctorSchema = new mongoose.Schema({
     },
     work_field : {
         id_hospital : mongoose.Schema.Types.ObjectId,
-        job:String,
-        required : true
+        job:String
     },
     rating : [ratingSchema]
 });

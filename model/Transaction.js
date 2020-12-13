@@ -5,18 +5,20 @@ const { chatSchema } = require('./Chat');
 var transactionSchema = new mongoose.Schema({
     status :{
         type:String,
-        required:true
+        required:[true,"Please Define the status"]
     },
     patient_id:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,
+        ref:"Patient"
     },
     doctor_id:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,
+        ref:"Doctor"
     },
     chat:[chatSchema]
-});
+},{timestamps:true});
 
 //Export the model
 module.exports = {

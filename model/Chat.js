@@ -5,8 +5,6 @@ var chatSchema = new mongoose.Schema({
     role:{
         type:String,
         required:true,
-        unique:true,
-        index:true,
     },
     text:{
         type:String,
