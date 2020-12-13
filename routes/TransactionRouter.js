@@ -69,7 +69,14 @@ router.route("/:transactionId")
                 msg:"Succesfully get a Transaction",
                 data : transaction
                 })
-        })
+        }).catch((err)=>{
+            res.statusCode = 400
+            res.send({
+              code : 400,
+              msg:"Bad Request",
+              data : null
+            })
+          })
     })
     .post((req,res,next)=>{
         res.statusCode = 403
@@ -77,9 +84,9 @@ router.route("/:transactionId")
     })
     .put((req,res,next)=>{
         res.setHeader("Content-Type","application/json")
-        if (req.body.status == undefined) {
-            next()   
-        }
+        // if (req.body.status == undefined) {
+        //     next()   
+        // }
         transactionModel.findOneAndUpdate({_id : req.params.transactionId},{status:req.body.status})
         .then(()=>{
             console.log("succesfully update a Transaction");
@@ -112,7 +119,14 @@ router.route("/:transactionId/chat")
                 msg:"Succesfully get all chat from transaction",
                 data : transaction.chat
                 })
-        })
+        }).catch((err)=>{
+            res.statusCode = 400
+            res.send({
+              code : 400,
+              msg:"Bad Request",
+              data : null
+            })
+          })
     })
     .post((req,res,next)=>{
         res.setHeader("Content-Type","application/json")
@@ -147,4 +161,5 @@ router.route("/:transactionId/chat")
         res.statusCode = 403
         res.send('This Operation is not supported, We Want to keep all the chat');
     })
+    
 module.exports = router;

@@ -4,10 +4,11 @@ const Schema = mongoose.Schema
 var itemRecipeSchema = new Schema({
     drug_id:{
         type:mongoose.Schema.Types.ObjectId,
-        required:true
+        required:true,
+        ref: "Drug"
     },
     quantity :{
-        type:Number,
+        type:String,
         required:true
     }
 });
@@ -23,7 +24,7 @@ var recipeSchema = new Schema({
         type:String,
         required:true
     },
-    Drugs:[itemRecipeSchema],
+    drugs:[itemRecipeSchema],
 },{timestamps:true});
 
 module.exports = {
