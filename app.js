@@ -4,11 +4,28 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var recipeRouter = require('./routes/RecipeRouter');
+var transactionRouter = require('./routes/TransactionRouter');
 
 var app = express();
 
+
+mongoose.connect('mongodb://localhost:27017/Martial', {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true
+}, (err) => {
+    if (!err) {
+        console.log('MongoDB Connection Succeeded.')
+    } else {
+        console.log('Error in DB connection: ' + err)
+    }
+});
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -20,7 +37,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/recipe', recipeRouter);
+app.use('/transaction', transactionRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -37,5 +55,4 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
 module.exports = app;
