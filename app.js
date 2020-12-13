@@ -13,7 +13,7 @@ var transactionRouter = require('./routes/TransactionRouter');
 
 var app = express();
 
-
+console.log("Connecting to MongoDB...");
 mongoose.connect('mongodb+srv://martial:martial123@cluster0.qxzax.mongodb.net/martial?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useCreateIndex: true,
