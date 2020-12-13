@@ -1,9 +1,9 @@
 # Installation
 install with this command : 
 ```
-    npm install
-    ```
+npm install
+```
 run with this command
 ```
-    npm start
-    ```
+npm start
+```
