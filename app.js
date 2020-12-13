@@ -4,16 +4,33 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+
 //Addition - Purusadi
 var mongoose = require('mongoose');
-var Drugs = require("./models/drugModel")
+var cookieSession = require('cookie-session');
+var passport = require('passport');
+var Drugs = require("./models/drugModel");
+var passportSetup = require('./config/passport-setup');
+var keys = require('./config/keys');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 //Additional Router
 var drugRouter = require('./routes/drugRouter');
+var authRouter = require('./routes/authRouter');
+var profileRouter = require('./routes/profileRoutes');
 
 var app = express();
+
+// set up session cookies
+app.use(cookieSession({
+  maxAge: 24 * 60 * 60 * 1000,
+  keys: [keys.session.cookieKey]
+}));
+
+// initialize passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Koneksi
 var url = "mongodb://127.0.0.1:27017/proyek1";
@@ -31,7 +48,7 @@ connect.then(
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -43,6 +60,9 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 //Additional app.use
 app.use('/drug', drugRouter);
+app.use('/auth', authRouter);
+app.use('/profile', profileRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

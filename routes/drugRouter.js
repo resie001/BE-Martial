@@ -33,10 +33,12 @@ drugRouter.route("/").get((req, res, next) => {
             createdDrug: result
         });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+        console.log(err);
     res.status(500).json({
         error : err
-    })    
+        });    
+    });
 })
 .put((req, res, next) => {
     res.status(403);
