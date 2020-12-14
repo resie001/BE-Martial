@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 var ratingsSchema = new Schema({
+    _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        auto: true
+    },
     user_id: {
         type: String,
         required: true
@@ -19,6 +23,9 @@ var ratingsSchema = new Schema({
 })
 
 var doctorsSchema = new Schema({
+    _id: {
+        type: mongoose.Schema.Types.ObjectId
+    },
     doctor_id: {
         type: String,
         required: true
@@ -33,7 +40,8 @@ var doctorsSchema = new Schema({
 
 var hospitalSchema = new Schema({
     _id: {
-        type: mongoose.Schema.Types.ObjectId
+        type: mongoose.Schema.Types.ObjectId,
+        auto: true
     },
     name: {
         type: String,
@@ -47,10 +55,7 @@ var hospitalSchema = new Schema({
         type: String,
         required: true
     },
-    specialities: {
-        type: [String],
-        required: true
-    },
+    specialities: [String],
     ratings: [ratingsSchema],
     doctors: [doctorsSchema]
 }, {

@@ -20,12 +20,14 @@ hospitalRouter.route('/')
   })
   // Tambah Rumah Sakit
   .post((req, res) => {
-    Hospital.create(req.body).then(() => {
+    Hospital.create(req.body).then((hospital) => {
+      console.log('Dish Created', hospital)
       res.status = 201
+      res.setHeader('Content-Type', 'application/json')
       res.json('Berhasil menambahkan Rumah Sakit')
     }).catch((error) => {
       res.status = error.statusCode
-      res.end = error.message.toString()
+      res.end(error.message.toString())
     })
   })
   // Method Put tidak support
@@ -47,10 +49,10 @@ hospitalRouter.route('/:hospitalId')
       res.status = 201
       res.setHeader('Content-Type', 'application/json')
       res.json(hospital)
+    }).catch((error) => {
+      res.status = error.statusCode
+      res.end(error.message.toString())
     })
-  }).catch((error) => {
-    res.status = error.statusCode
-    res.end(error.message.toString())
   })
   // Method Post tidak support
   .post((req, res) => {
@@ -59,7 +61,7 @@ hospitalRouter.route('/:hospitalId')
   })
   // update rumah sakit
   .put((req, res) => {
-    Hospital.findByIdAndUpdate(req.params.hospitalId, { $set?: req.body }, { new: true }).then((hospital) => {
+    Hospital.findByIdAndUpdate(req.params.hospitalId, { $set: req.body }, { new: true }).then(() => {
       res.status = 201
       res.end = "Update Berhasil"
     }).catch((error) => {

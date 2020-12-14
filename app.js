@@ -3,33 +3,34 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var morgan = require('morgan')
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
+const hospitalRouter = require('./routes/hospitalRouter');
+const Hospital = require('./models/hospital');
 
 var app = express();
-
 const url = 'mongodb://localhost:27017/conFusion'
-var connect = mongoose.connect(url)
+var connect = mongoose.connect(url,{ useUnifiedTopology: true })
 
 connect.then((db) => {
   console.log('Koneksi berhasil')
+  // console.log(db)
 }, (err) => {
   console.log(err)
 })
-
-app.use(bodyParser.urlencoded({extended : false}));
-app.use(bodyParser.json());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
+app.use(morgan())
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/hospitals', hospitalRouter)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
