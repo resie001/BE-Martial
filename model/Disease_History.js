@@ -13,6 +13,7 @@ var diseaseHisSchema = new mongoose.Schema({
     status:{
         type:String,
         required:true,
+        enum:["treatment","recover"]
     }
 });
 

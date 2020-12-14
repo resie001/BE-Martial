@@ -20,7 +20,10 @@ var doctorSchema = new mongoose.Schema({
         required:true,
     },
     work_field : {
-        id_hospital : mongoose.Schema.Types.ObjectId,
+        id_hospital : {
+            type : mongoose.Schema.Types.ObjectId,
+            ref:"Hospital"
+        },
         job:String
     },
     rating : [ratingSchema]
