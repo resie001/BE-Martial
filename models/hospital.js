@@ -47,7 +47,7 @@ var hospitalSchema = new Schema({
         type: String,
         required: true
     },
-    speciality: {
+    specialities: {
         type: [String],
         required: true
     },
