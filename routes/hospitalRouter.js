@@ -5,6 +5,13 @@ var hospitalRouter = express.Router();
 
 hospitalRouter.use(bodyParser.json())
 
+function _arrayRemove(arr, value) {
+
+  return arr.filter(function (ele) {
+    return ele != value;
+  });
+}
+
 // Router List Rumah Sakit dengan address '/'
 hospitalRouter.route('/')
   // Ambil List Rumah Sakit
@@ -123,15 +130,74 @@ hospitalRouter.route('/:hospitalId/specialities')
       }
     }))
   })
+  .put((req, res) => {
+    res.status = 403
+    res.end('Put operation is not supported')
+  })
+  .delete((req, res) => {
+    Hospital.findById(req.params.hospitalId, ((error, hospital) => {
+      if (error) {
+        res.status = error.statusCode
+        res.setHeader('Content-Type', 'application/json')
+        res.end(error.message.toString())
+      } else {
+        hospital.specialities.pull(req.body.speciality)
+        hospital.save((error, speciality) => {
+          if (error) {
+            res.status = error.statusCode
+            res.setHeader('Content-Type', 'application/json')
+            res.end(error.message.toString())
+          } else {
+            res.status = 201
+            res.setHeader('Content-Type', 'application/json')
+            res.json(speciality)
+          }
+        })
+      }
+    }))
+  })
+
+hospitalRouter.route('/:hospitalId/ratings')
+  .get((req, res)=>{
+    Hospital.findById(req.params.hospitalId).then((hospital)=>{
+      if(hospital.ratings.length != 0){
+        res.status = 201
+        res.setHeader('Content-Type', 'application/json')
+        res.json(hospital.ratings)
+      } else{
+        res.status = 404
+        res.setHeader('Content-Type', 'application/json')
+        res.end("Rating rumah sakit masih kosong")
+      }
+    }).catch((error)=>{
+      res.status = error.statusCode
+      res.setHeader('Content-Type', 'application/json')
+      res.end(error.message.toString())
+    })
+  })
+  .post((req, res)=>{
+    Hospital.findById(req.params.hospitalId).then((hospital)=>{
+      hospital.ratings.push(req.body)
+      hospital.save().then(()=>{
+        res.status = 201
+        res.setHeader('Content-Type', 'application/json')
+        res.json("Tambah rating berhasil")
+      }).catch((error)=>{
+        res.status = error.statusCode
+        res.setHeader('Content-Type', 'application/json')
+        res.end(error.message.toString())
+      })
+    })
+  })
   .put((req, res)=>{
     res.status = 403
     res.end('Put operation is not supported')
   })
   .delete((req, res)=>{
     res.status = 403
-    res.end('Put operation is not supported')
+    res.end('Delete operation is not supported')
   })
 
-// hospitalRouter.route('/:hospitalId/ratings')
+// hospitalRouter.route('/:hospitalId/ratings/:ratingId')
 
 module.exports = hospitalRouter;
