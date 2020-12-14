@@ -24,7 +24,7 @@ mongoose.connect('mongodb+srv://martial:martial123@cluster0.qxzax.mongodb.net/ma
 
 var cookieSession = require('cookie-session');
 var passport = require('passport');
-var Drugs = require("./models/Drug");
+var Drugs = require("./model/Drug");
 var passportSetup = require('./config/passport-setup');
 var keys = require('./config/keys');
 
