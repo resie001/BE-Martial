@@ -5,13 +5,6 @@ var hospitalRouter = express.Router();
 
 hospitalRouter.use(bodyParser.json())
 
-function _arrayRemove(arr, value) {
-
-  return arr.filter(function (ele) {
-    return ele != value;
-  });
-}
-
 // Router List Rumah Sakit dengan address '/'
 hospitalRouter.route('/')
   // Ambil List Rumah Sakit
@@ -22,7 +15,6 @@ hospitalRouter.route('/')
       res.json(hospitals)
     }).catch((error) => {
       res.status = error.statusCode
-      res.setHeader('Content-Type', 'application/json')
       res.end(error.message.toString())
     })
   })
@@ -30,10 +22,9 @@ hospitalRouter.route('/')
   .post((req, res) => {
     Hospital.create(req.body).then(() => {
       res.status = 201
-      res.end('Berhasil menambahkan Rumah Sakit')
+      res.json('Berhasil menambahkan Rumah Sakit')
     }).catch((error) => {
       res.status = error.statusCode
-      res.setHeader('Content-Type', 'application/json')
       res.end = error.message.toString()
     })
   })
@@ -59,7 +50,6 @@ hospitalRouter.route('/:hospitalId')
     })
   }).catch((error) => {
     res.status = error.statusCode
-    res.setHeader('Content-Type', 'application/json')
     res.end(error.message.toString())
   })
   // Method Post tidak support
@@ -74,7 +64,6 @@ hospitalRouter.route('/:hospitalId')
       res.end = "Update Berhasil"
     }).catch((error) => {
       res.status = error.statusCode
-      res.setHeader('Content-Type', 'application/json')
       res.end(error.message.toString())
     })
   })
@@ -85,7 +74,6 @@ hospitalRouter.route('/:hospitalId')
       res.end = "Hapus berhasil"
     }).catch((error) => {
       res.status = error.statusCode
-      res.setHeader('Content-Type', 'application/json')
       res.end(error.message.toString())
     })
   })
@@ -104,7 +92,6 @@ hospitalRouter.route('/:hospitalId/specialities')
       }
     }).catch((error) => {
       res.status = error.statusCode
-      res.setHeader('Content-Type', 'application/json')
       res.end(error.message.toString())
     })
   })
@@ -119,7 +106,6 @@ hospitalRouter.route('/:hospitalId/specialities')
         hospital.save((err, speciality) => {
           if (err) {
             res.status = error.statusCode
-            res.setHeader('Content-Type', 'application/json')
             res.end(error.message.toString())
           } else {
             res.status = 200
@@ -138,14 +124,12 @@ hospitalRouter.route('/:hospitalId/specialities')
     Hospital.findById(req.params.hospitalId, ((error, hospital) => {
       if (error) {
         res.status = error.statusCode
-        res.setHeader('Content-Type', 'application/json')
         res.end(error.message.toString())
       } else {
         hospital.specialities.pull(req.body.speciality)
         hospital.save((error, speciality) => {
           if (error) {
             res.status = error.statusCode
-            res.setHeader('Content-Type', 'application/json')
             res.end(error.message.toString())
           } else {
             res.status = 201
@@ -158,46 +142,91 @@ hospitalRouter.route('/:hospitalId/specialities')
   })
 
 hospitalRouter.route('/:hospitalId/ratings')
-  .get((req, res)=>{
-    Hospital.findById(req.params.hospitalId).then((hospital)=>{
-      if(hospital.ratings.length != 0){
+  .get((req, res) => {
+    Hospital.findById(req.params.hospitalId).then((hospital) => {
+      if (hospital.ratings.length != 0) {
         res.status = 201
         res.setHeader('Content-Type', 'application/json')
         res.json(hospital.ratings)
-      } else{
+      } else {
         res.status = 404
-        res.setHeader('Content-Type', 'application/json')
         res.end("Rating rumah sakit masih kosong")
       }
-    }).catch((error)=>{
+    }).catch((error) => {
       res.status = error.statusCode
       res.setHeader('Content-Type', 'application/json')
       res.end(error.message.toString())
     })
   })
-  .post((req, res)=>{
-    Hospital.findById(req.params.hospitalId).then((hospital)=>{
+  .post((req, res) => {
+    Hospital.findById(req.params.hospitalId).then((hospital) => {
       hospital.ratings.push(req.body)
-      hospital.save().then(()=>{
+      hospital.save().then(() => {
         res.status = 201
         res.setHeader('Content-Type', 'application/json')
         res.json("Tambah rating berhasil")
-      }).catch((error)=>{
+      }).catch((error) => {
         res.status = error.statusCode
-        res.setHeader('Content-Type', 'application/json')
         res.end(error.message.toString())
       })
     })
   })
-  .put((req, res)=>{
+  .put((req, res) => {
     res.status = 403
     res.end('Put operation is not supported')
   })
-  .delete((req, res)=>{
+  .delete((req, res) => {
     res.status = 403
     res.end('Delete operation is not supported')
   })
 
-// hospitalRouter.route('/:hospitalId/ratings/:ratingId')
+hospitalRouter.route('/:hospitalId/ratings/:ratingId')
+  .get((req, res) => {
+    Hospital.findById(req.params.hospitalId).then((hospital) => {
+      res.status = 201
+      res.setHeader('Content-Type', 'application/json')
+      res.json(hospital.ratings.id(req.params.ratingId))
+    }).catch((error) => {
+      res.status = error.statusCode
+      res.end(error.message.toString())
+    })
+  })
+  .post((req, res) => {
+    res.status = 403
+    res.end('Post operation is not supported')
+  })
+  .put((req, res) => {
+    Hospital.findById(req.params.hospitalId).then((hospital) => {
+      hospital.ratings.id(req.params.ratingId).remove()
+      hospital.ratings.push(req.body)
+      hospital.ratings.save().then(() => {
+        res.status = 201
+        res.setHeader('Content-Type', 'application/json')
+        res.json("Update rating berhasil")
+      }).catch((error) => {
+        res.status = error.statusCode
+        res.end(error.message.toString())
+      })
+    }).catch((error) => {
+      res.status = error.statusCode
+      res.end(error.message.toString())
+    })
+  })
+  .delete((req, res) => {
+    Hospital.findById(req.params.hospitalId).then((hospital) => {
+      hospital.ratings.id(req.params.ratingId).remove()
+      hospital.ratings.save().then(() => {
+        res.status = 201
+        res.setHeader('Content-Type', 'application/json')
+        res.json("Hapus rating berhasil")
+      }).catch((error) => {
+        res.status = error.statusCode
+        res.end(error.message.toString())
+      })
+    }).catch((error) => {
+      res.status = error.statusCode
+      res.end(error.message.toString())
+    })
+  })
 
 module.exports = hospitalRouter;
