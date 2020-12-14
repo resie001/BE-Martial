@@ -22,7 +22,7 @@ var userSchema = new mongoose.Schema({
         type: String,
         required: true
       },
-    data_id:{
+     data_id:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,
         index:true,
