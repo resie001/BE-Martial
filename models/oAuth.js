@@ -4,7 +4,12 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema(
     {
     username: String,
-    googleId: String
+    googleId: String,
+    role: {
+        type: String,
+        default: "user",
+        enum: ["user", "dokter", "superadmin"]
+      }
 }
 );
 

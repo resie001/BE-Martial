@@ -9,16 +9,17 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 var cookieSession = require('cookie-session');
 var passport = require('passport');
-var Drugs = require("./models/drugModel");
+var Drugs = require("./models/Drug");
 var passportSetup = require('./config/passport-setup');
 var keys = require('./config/keys');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+//var usersRouter = require('./routes/users');
 //Additional Router
 var drugRouter = require('./routes/drugRouter');
 var authRouter = require('./routes/authRouter');
 var profileRouter = require('./routes/profileRoutes');
+var userRouter = require('./routes/userRouter');
 
 var app = express();
 
@@ -57,11 +58,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+//app.use('/users', usersRouter);
 //Additional app.use
 app.use('/drug', drugRouter);
 app.use('/auth', authRouter);
 app.use('/profile', profileRouter);
+app.use('/users', userRouter);
 
 
 // catch 404 and forward to error handler

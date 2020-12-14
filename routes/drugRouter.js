@@ -2,13 +2,13 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
-const Drugs = require("../models/drugModel");
+const { drugModel } = require("../models/Drug");
 const drugRouter = express.Router();
 drugRouter.use(bodyParser.json());
 
 
 drugRouter.route("/").get((req, res, next) => {
-    Drugs.find({}).then((drugs) => {
+    drugModel.find({}).then((drugs) => {
         res.status(200);
         res.setHeader("Content-Type", "application/json");
         res.json(drugs);
@@ -21,10 +21,9 @@ drugRouter.route("/").get((req, res, next) => {
     });
 })
 . post((req, res, next) => {
-    const drug  = new Drugs ({
+    const drug  = new drugModel ({
       _id: new mongoose.Types.ObjectId(),
-      drugName: req.body.drugName,
-      drugImage: req.body.drugImage
+      name: req.body.name
     });
     drug.save().then(result => {
         console.log(result);
@@ -45,7 +44,7 @@ drugRouter.route("/").get((req, res, next) => {
     res.end("PUT operation is not supported");
 })
 .delete((req, res, next) => {
-    Drugs.remove().then ((resp) => {
+    drugModel.remove().then ((resp) => {
         console.log("All drugs deleted");
         res.status(200);
         res.setHeader("Content-Type", "application/json");
@@ -55,7 +54,7 @@ drugRouter.route("/").get((req, res, next) => {
 
 //Respon dengan parameter
 drugRouter.route("/:drugId").get((req, res, next) => {
-    Drugs.findById(req.params.drugId).then((drug) => {
+    drugModel.findById(req.params.drugId).then((drug) => {
         res.status(200);
         res.setHeader("Content-Type", "application/json");
         res.json(drug);
@@ -78,7 +77,7 @@ drugRouter.route("/:drugId").get((req, res, next) => {
         updateOps[ops.propName] =ops.value;
 
     }
-    Drugs.update({ _id: id }, { $set: updateOps})
+    drugModel.update({ _id: id }, { $set: updateOps})
     .exec().then(result => {
         res.status(200).json(result);
     })
@@ -92,7 +91,7 @@ drugRouter.route("/:drugId").get((req, res, next) => {
 })
 .delete((req, res, next) => {
     const id = req.params.drugId;
-    Drugs.remove({_id : id})
+    drugModel.remove({_id : id})
     .exec().then(result => {
         res.status(200).json(result);
     })

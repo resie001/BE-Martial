@@ -8,7 +8,3 @@ router.get('/', function(req, res, next) {
 
 module.exports = router;
 
-// // create home route
-// app.get('/', (req, res) => {
-//   res.render('home', { user: req.user });
-// });
