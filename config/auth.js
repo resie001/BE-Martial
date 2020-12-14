@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-const User = require('../models/User');
+const User = require('../model/User');
 
 /**
  * DESC to register the user (User, Dokter, superAdmin)

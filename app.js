@@ -7,6 +7,21 @@ var logger = require('morgan');
 
 //Addition - Purusadi
 var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+//Koneksi ke DB
+mongoose.connect('mongodb+srv://martial:martial123@cluster0.qxzax.mongodb.net/martial?retryWrites=true&w=majority', {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true
+}, (err) => {
+    if (!err) {
+        console.log('MongoDB Connection Succeeded.')
+    } else {
+        console.log('Error in DB connection: ' + err)
+    }
+});
+
 var cookieSession = require('cookie-session');
 var passport = require('passport');
 var Drugs = require("./models/Drug");
@@ -20,6 +35,10 @@ var drugRouter = require('./routes/drugRouter');
 var authRouter = require('./routes/authRouter');
 var profileRouter = require('./routes/profileRoutes');
 var userRouter = require('./routes/userRouter');
+var recipeRouter = require('./routes/RecipeRouter');
+var transactionRouter = require('./routes/TransactionRouter');
+
+
 
 var app = express();
 
@@ -33,19 +52,6 @@ app.use(cookieSession({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Koneksi
-var url = "mongodb://127.0.0.1:27017/proyek1";
-var connect = mongoose.connect(url);
-
-// Tangkap hasil koneksi
-connect.then(
-  (db) => {
-    console.log("Koneksi Sukses!");
-  },
-  (err) => {
-    console.log("Terjadi Kegagalan Koneksi");
-  }
-);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -64,6 +70,8 @@ app.use('/drug', drugRouter);
 app.use('/auth', authRouter);
 app.use('/profile', profileRouter);
 app.use('/users', userRouter);
+app.use('/recipe', recipeRouter);
+app.use('/transaction', transactionRouter);
 
 
 // catch 404 and forward to error handler
@@ -81,5 +89,4 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
 module.exports = app;

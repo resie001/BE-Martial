@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
-const { drugModel } = require("../models/Drug");
+const { drugModel } = require("../model/Drug");
 const drugRouter = express.Router();
 drugRouter.use(bodyParser.json());
 
