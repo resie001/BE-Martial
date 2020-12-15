@@ -21,10 +21,9 @@ hospitalRouter.route('/')
   // Tambah Rumah Sakit
   .post((req, res) => {
     Hospital.create(req.body).then((hospital) => {
-      console.log('Dish Created', hospital)
       res.status = 201
       res.setHeader('Content-Type', 'application/json')
-      res.json('Berhasil menambahkan Rumah Sakit')
+      res.json(hospital)
     }).catch((error) => {
       res.status = error.statusCode
       res.end(error.message.toString())
@@ -119,8 +118,21 @@ hospitalRouter.route('/:hospitalId/specialities')
     }))
   })
   .put((req, res) => {
-    res.status = 403
-    res.end('Put operation is not supported')
+    Hospital.findById(req.params.hospitalId).then((hospital)=>{
+      hospital.specialities.pull(req.body.old_speciality)
+      hospital.specialities.push(req.body.speciality)
+      hospital.save().then(()=>{
+        res.status = 201
+        res.setHeader('Content-Type', 'application/json')
+        res.json("Update speciality berhasil")
+      }).catch((error)=>{
+        res.status = error.statusCode
+        res.end(error.message.toString())
+      })
+    }).catch((error)=>{
+      res.status = error.statusCode
+            res.end(error.message.toString())
+    })
   })
   .delete((req, res) => {
     Hospital.findById(req.params.hospitalId, ((error, hospital) => {
@@ -201,7 +213,7 @@ hospitalRouter.route('/:hospitalId/ratings/:ratingId')
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       hospital.ratings.id(req.params.ratingId).remove()
       hospital.ratings.push(req.body)
-      hospital.ratings.save().then(() => {
+      hospital.save().then(() => {
         res.status = 201
         res.setHeader('Content-Type', 'application/json')
         res.json("Update rating berhasil")
@@ -217,7 +229,7 @@ hospitalRouter.route('/:hospitalId/ratings/:ratingId')
   .delete((req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       hospital.ratings.id(req.params.ratingId).remove()
-      hospital.ratings.save().then(() => {
+      hospital.save().then(() => {
         res.status = 201
         res.setHeader('Content-Type', 'application/json')
         res.json("Hapus rating berhasil")
@@ -237,7 +249,7 @@ hospitalRouter.route('/:hospitalId/doctors')
       if (hospital.doctors.length != 0) {
         res.status = 201
         res.setHeader('Content-Type', 'application/json')
-        res.json(hospital.ratings)
+        res.json(hospital.doctors)
       } else {
         res.status = 404
         res.end('Belum menambahkan doktor')
@@ -250,7 +262,7 @@ hospitalRouter.route('/:hospitalId/doctors')
   .post((req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       hospital.doctors.push(req.body)
-      hospital.doctors.save().then(() => {
+      hospital.save().then(() => {
         res.status = 201
         res.setHeader('Content-Type', 'application/json')
         res.end('Tambah dokter berhasil')

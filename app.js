@@ -6,7 +6,6 @@ var logger = require('morgan');
 var morgan = require('morgan')
 const mongoose = require('mongoose');
 const hospitalRouter = require('./routes/hospitalRouter');
-const Hospital = require('./models/hospital');
 
 var app = express();
 const url = 'mongodb://localhost:27017/conFusion'
