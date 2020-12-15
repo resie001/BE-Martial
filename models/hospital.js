@@ -23,14 +23,14 @@ var ratingsSchema = new Schema({
 })
 
 var doctorsSchema = new Schema({
-    _id: {
-        type: mongoose.Schema.Types.ObjectId
-    },
+    // _id: {
+    //     type: mongoose.Schema.Types.ObjectId
+    // },
     doctor_id: {
         type: String,
         required: true
     },
-    job: {
+    job: { 
         type: String,
         required: true
     }

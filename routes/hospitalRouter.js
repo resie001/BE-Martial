@@ -63,7 +63,7 @@ hospitalRouter.route('/:hospitalId')
   .put((req, res) => {
     Hospital.findByIdAndUpdate(req.params.hospitalId, { $set: req.body }, { new: true }).then(() => {
       res.status = 201
-      res.end = "Update Berhasil"
+      res.end("Update Berhasil")
     }).catch((error) => {
       res.status = error.statusCode
       res.end(error.message.toString())
@@ -73,7 +73,7 @@ hospitalRouter.route('/:hospitalId')
   .delete((req, res) => {
     Hospital.findByIdAndRemove(req.params.hospitalId).then(() => {
       res.status = 201
-      res.end = "Hapus berhasil"
+      res.end("Hapus berhasil")
     }).catch((error) => {
       res.status = error.statusCode
       res.end(error.message.toString())
@@ -229,6 +229,47 @@ hospitalRouter.route('/:hospitalId/ratings/:ratingId')
       res.status = error.statusCode
       res.end(error.message.toString())
     })
+  })
+
+hospitalRouter.route('/:hospitalId/doctors')
+  .get((req, res) => {
+    Hospital.findById(req.params.hospitalId).then((hospital) => {
+      if (hospital.doctors.length != 0) {
+        res.status = 201
+        res.setHeader('Content-Type', 'application/json')
+        res.json(hospital.ratings)
+      } else {
+        res.status = 404
+        res.end('Belum menambahkan doktor')
+      }
+    }).catch((error) => {
+      res.status = error.statusCode
+      res.end(error.message.toString())
+    })
+  })
+  .post((req, res) => {
+    Hospital.findById(req.params.hospitalId).then((hospital) => {
+      hospital.doctors.push(req.body)
+      hospital.doctors.save().then(() => {
+        res.status = 201
+        res.setHeader('Content-Type', 'application/json')
+        res.end('Tambah dokter berhasil')
+      }).catch((error) => {
+        res.status = error.statusCode
+        res.end(error.message.toString())
+      })
+    }).catch((error) => {
+      res.status = error.statusCode
+      res.end(error.message.toString())
+    })
+  })
+  .put((req, res) => {
+    res.status = 403
+    res.end('Put operation is not supported')
+  })
+  .delete((req, res) => {
+    res.status = 403
+    res.end('Delete operation is not supported')
   })
 
 module.exports = hospitalRouter;
