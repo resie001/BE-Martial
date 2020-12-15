@@ -6,6 +6,7 @@ var logger = require('morgan');
 var morgan = require('morgan')
 const mongoose = require('mongoose');
 const hospitalRouter = require('./routes/hospitalRouter');
+const authRouter = require('./routes/authRouter');
 
 var app = express();
 const url = 'mongodb://localhost:27017/conFusion'
@@ -30,6 +31,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/hospitals', hospitalRouter)
+app.use('/auth', authRouter)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
