@@ -43,7 +43,7 @@ var doctorRouter = require('./routes/DoctorRouter');
 // var hospitalRouter = require('./routes/HospitalRouter');
 var patientRouter = require('./routes/PatientRouter');
 const hospitalRouter = require('./routes/hospitalRouter');
-const Hospital = require('./model/hospital');
+// const Hospital = require('./model/hospital');
 
 
 
