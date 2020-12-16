@@ -14,6 +14,7 @@ var patientSchema = new mongoose.Schema({
     sex:{
         type:String,
         required:true,
+        enum: ["pria", "wanita"]
     },
     address:{
         type:String,

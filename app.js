@@ -10,6 +10,7 @@ var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 //Koneksi ke DB
 mongoose.connect('mongodb+srv://martial:martial123@cluster0.qxzax.mongodb.net/martial?retryWrites=true&w=majority', {
+// mongoose.connect('mongodb://localhost:27017/martial', {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
@@ -37,6 +38,9 @@ var profileRouter = require('./routes/profileRoutes');
 var userRouter = require('./routes/userRouter');
 var recipeRouter = require('./routes/RecipeRouter');
 var transactionRouter = require('./routes/TransactionRouter');
+var doctorRouter = require('./routes/DoctorRouter');
+var hospitalRouter = require('./routes/HospitalRouter');
+var patientRouter = require('./routes/PatientRouter');
 
 
 
@@ -72,6 +76,9 @@ app.use('/profile', profileRouter);
 app.use('/users', userRouter);
 app.use('/recipe', recipeRouter);
 app.use('/transaction', transactionRouter);
+app.use('/doctor', doctorRouter);
+app.use('/hospital', hospitalRouter);
+app.use('/patient', patientRouter);
 
 
 // catch 404 and forward to error handler
