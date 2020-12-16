@@ -4,13 +4,14 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-
+require('dotenv').config()
+// var morgan = require('morgan')
 //Addition - Purusadi
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 //Koneksi ke DB
-mongoose.connect('mongodb+srv://martial:martial123@cluster0.qxzax.mongodb.net/martial?retryWrites=true&w=majority', {
-// mongoose.connect('mongodb://localhost:27017/martial', {
+
+mongoose.connect(process.env.TEST_URI, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
@@ -39,12 +40,15 @@ var userRouter = require('./routes/userRouter');
 var recipeRouter = require('./routes/RecipeRouter');
 var transactionRouter = require('./routes/TransactionRouter');
 var doctorRouter = require('./routes/DoctorRouter');
-var hospitalRouter = require('./routes/HospitalRouter');
+// var hospitalRouter = require('./routes/HospitalRouter');
 var patientRouter = require('./routes/PatientRouter');
+const hospitalRouter = require('./routes/hospitalRouter');
+const Hospital = require('./model/hospital');
 
 
 
 var app = express();
+
 
 // set up session cookies
 app.use(cookieSession({
@@ -62,6 +66,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
+// app.use(morgan())
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -77,17 +82,18 @@ app.use('/users', userRouter);
 app.use('/recipe', recipeRouter);
 app.use('/transaction', transactionRouter);
 app.use('/doctor', doctorRouter);
-app.use('/hospital', hospitalRouter);
+// app.use('/hospital', hospitalRouter);
+app.use('/hospitals', hospitalRouter)
 app.use('/patient', patientRouter);
 
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

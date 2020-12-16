@@ -1,11 +1,11 @@
 // add this file to .gitignore
-
+require("dotenv").config()
 module.exports = {
     google: {
-        clientID:'613222979742-d7nv5ecjh361chargsbjsv2qnsao6n4e.apps.googleusercontent.com',
-        clientSecret:'Oz5WzdpuTujff_cwzuKrCVFF'
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret:process.env.GOOGLE_CLIENT_SECRET
     },
     session: {
-        cookieKey: 'asdasdasd'
+        cookieKey: process.env.COOKIES_KEY
     }
 };

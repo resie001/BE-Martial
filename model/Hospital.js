@@ -1,29 +1,27 @@
-const mongoose = require('mongoose'); // Erase if already required
-const { doctorSchema } = require('./Doctor');
-const { ratingSchema } = require('./Rating');
+const mongoose = require("mongoose");
+const { doctorSchema } = require("./Doctor");
+const { ratingSchema } = require("./Rating");
+const Schema = mongoose.Schema;
 
-// Declare the Schema of the Mongo model
-var hospitalSchema = new mongoose.Schema({
-    name:{
-        type:String,
-        required:true,
-        index:true,
+var hospitalSchema = new Schema({
+    name: {
+        type: String,
+        required: true
     },
-    bio:{
-        type:String,
-        required:true,
+    bio: {
+        type: String,
+        required: true
     },
-    address:{
-        type:String,
-        required:true,
+    address: {
+        type: String,
+        required: true
     },
-    speciality:[String],
-    rating:[ratingSchema],
-    doctors : [doctorSchema]
-});
+    specialities: [String],
+    ratings: [ratingSchema],
+    doctors: [doctorSchema]
+}, {
+    timestamps: true
+})
+var hospital = mongoose.model('Hospital', hospitalSchema)
 
-//Export the model
-module.exports = {
-    hospitalModel : mongoose.model('Hospital', hospitalSchema),
-    hospitalSchema : hospitalSchema
-};
+module.exports = hospital
