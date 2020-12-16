@@ -42,7 +42,7 @@ var transactionRouter = require('./routes/TransactionRouter');
 var doctorRouter = require('./routes/DoctorRouter');
 // var hospitalRouter = require('./routes/HospitalRouter');
 var patientRouter = require('./routes/PatientRouter');
-const hospitalRouter = require('./routes/hospitalRouter');
+const hospitalRouter = require('./routes/HospitalRouter');
 // const Hospital = require('./model/hospital');
 
 
