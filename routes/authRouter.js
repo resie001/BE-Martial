@@ -20,12 +20,20 @@ authRouter.route('/login')
                     data: token
                 })
             } else {
-                res.status(201)
-                res.end('Login gagal')
+                res.status(401)
+                res.setHeader('Content-Type', 'application/json')
+                res.josn({
+                    status: 401,
+                    message: "Login gagal"
+                })
             }
         } else {
             res.status(404)
-            res.end("username atau password salah")
+            res.setHeader('Content-Type', 'application/json')
+            res.josn({
+                status: 401,
+                message: "username atau password salah"
+            })
         }
     })
     .put((req, res) => {
