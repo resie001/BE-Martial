@@ -1,7 +1,7 @@
 const bodyParser = require('body-parser');
 var express = require('express');
 const { doctorModel } = require('../model/Doctor');
-const { hospitalModel } = require('../model/Hospital');
+const { hospitalModel } = require('../model/Hospital-temp');
 const { patientModel } = require('../model/Patient');
 const {recipeModel, itemRecipeModel} = require('../model/Recipe')
 var router = express.Router();

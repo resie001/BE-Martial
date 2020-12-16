@@ -3,13 +3,14 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-require('dotenv').config()
 
+require('dotenv').config()
+// var morgan = require('morgan')
 //Addition - Purusadi
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 //Koneksi ke DB
-// mongoose.connect('mongodb+srv://martial:martial123@cluster0.qxzax.mongodb.net/martial?retryWrites=true&w=majority', {
+
 mongoose.connect(process.env.TEST_URI, {
     useNewUrlParser: true,
     useCreateIndex: true,
@@ -39,12 +40,15 @@ var userRouter = require('./routes/userRouter');
 var recipeRouter = require('./routes/RecipeRouter');
 var transactionRouter = require('./routes/TransactionRouter');
 var doctorRouter = require('./routes/DoctorRouter');
-var hospitalRouter = require('./routes/HospitalRouter');
+// var hospitalRouter = require('./routes/HospitalRouter');
 var patientRouter = require('./routes/PatientRouter');
+const hospitalRouter = require('./routes/hospitalRouter');
+const Hospital = require('./model/hospital');
 
 
 
 var app = express();
+
 
 // set up session cookies
 app.use(cookieSession({
@@ -62,6 +66,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
+// app.use(morgan())
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -77,7 +82,8 @@ app.use('/users', userRouter);
 app.use('/recipe', recipeRouter);
 app.use('/transaction', transactionRouter);
 app.use('/doctor', doctorRouter);
-app.use('/hospital', hospitalRouter);
+// app.use('/hospital', hospitalRouter);
+app.use('/hospitals', hospitalRouter)
 app.use('/patient', patientRouter);
 
 
