@@ -3,14 +3,14 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+require('dotenv').config()
 
 //Addition - Purusadi
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 //Koneksi ke DB
-mongoose.connect('mongodb+srv://martial:martial123@cluster0.qxzax.mongodb.net/martial?retryWrites=true&w=majority', {
-// mongoose.connect('mongodb://localhost:27017/martial', {
+// mongoose.connect('mongodb+srv://martial:martial123@cluster0.qxzax.mongodb.net/martial?retryWrites=true&w=majority', {
+mongoose.connect(process.env.TEST_URI, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
