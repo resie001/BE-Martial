@@ -7,10 +7,11 @@ var morgan = require('morgan')
 const mongoose = require('mongoose');
 const hospitalRouter = require('./routes/hospitalRouter');
 const authRouter = require('./routes/authRouter');
+const auth = require('./middleware/auth');
 
 var app = express();
 const url = 'mongodb://localhost:27017/conFusion'
-var connect = mongoose.connect(url,{ useUnifiedTopology: true })
+var connect = mongoose.connect(url, { useUnifiedTopology: true })
 
 connect.then((db) => {
   console.log('Koneksi berhasil')
@@ -30,15 +31,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/hospitals', hospitalRouter)
+app.use('/hospitals', auth.isAuth, hospitalRouter)
 app.use('/auth', authRouter)
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

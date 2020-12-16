@@ -14,7 +14,11 @@ authRouter.route('/login')
             if (token) {
                 res.status(201)
                 res.setHeader('Content-Type', 'application/json')
-                res.json(token)
+                res.json({
+                    status: 201,
+                    message: 'Login berhasil',
+                    data: token
+                })
             } else {
                 res.status(201)
                 res.end('Login gagal')
