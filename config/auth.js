@@ -6,8 +6,6 @@ const User = require('../model/User');
 /**
  * DESC to register the user (User, Dokter, superAdmin)
  */
-var data_id ="";
-var msg = "";
 const userRegister = async(userDets, role, res) => {
     try {
     
@@ -28,12 +26,29 @@ const userRegister = async(userDets, role, res) => {
             success: false
         });
     }
+    
+    var data_id ="";
+    var msg = "";
     switch (role) {
         case "dokter":
-            // val newDoctor = {
-
-            // }
-            doctorModel.create(req.body).then((doctor)=>{
+            let requestDoctorCheck = await validateDoctorRequest(userDets);
+            if(!requestDoctorCheck){
+                return res.status(400).json({
+                    message: "Bad Request",
+                    success: false
+                });
+            }
+            var newDoctor = {
+                name:userDets.name,
+                bio:userDets.bio,
+                expertise:userDets.expertise,
+                medical_experience:userDets.medical_experience,
+                work_field:null
+            }
+            if (userDets.work_field != undefined) {
+                newDoctor.work_field = userDets.work_field;
+            }
+            doctorModel.create(newDoctor).then((doctor)=>{
                 console.log(doctor);
                 data_id=doctor._id;
                 msg = "doctor";
@@ -41,9 +56,8 @@ const userRegister = async(userDets, role, res) => {
                 console.log(err);
                 res.statusCode = 400
                 return res.send({
-                    code : 400,
-                    msg:"Error : "+err._message,
-                    data : null
+                    message: "Bad Request",
+                    success: false
                 })
             })  
             break;
