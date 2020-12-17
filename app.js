@@ -11,8 +11,8 @@ var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 //Koneksi ke DB
 
-// mongoose.connect(process.env.BASE_URI+"&"+process.env.URI_OPTION, {
-mongoose.connect(process.env.TEST_URI, {
+mongoose.connect(process.env.BASE_URI+"&"+process.env.URI_OPTION, {
+// mongoose.connect(process.env.TEST_URI, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
