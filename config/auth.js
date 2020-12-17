@@ -84,14 +84,17 @@ const userRegister = async(userDets, role, res) => {
                 data_id=patient._id
                 msg = "patient"
             }).catch((err)=>{
-                return res.send({
-                    code : 400,
-                    msg:"Error : "+err._message,
-                    data : null
-                })
+                return res.status(400).json({
+                    message: "Bad Request",
+                    success: false
+                });
             })
             break;
         default:
+            return res.status(400).json({
+                message: "Unknown EndPoint",
+                success: false
+            });
             break;
     }
     

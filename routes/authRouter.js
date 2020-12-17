@@ -60,7 +60,11 @@ authRouter.route('/login')
                         res.json({
                             status: 201,
                             message: 'Login berhasil',
-                            data: token
+                            data: {
+                                role_id : user.data_id,
+                                token :token,
+                                role : user.role
+                            }
                         })
                     } else {
                         res.status(500)
