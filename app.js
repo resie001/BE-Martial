@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors')
 
 require('dotenv').config()
 // var morgan = require('morgan')
@@ -11,17 +12,17 @@ var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 //Koneksi ke DB
 
-mongoose.connect(process.env.BASE_URI+"&"+process.env.URI_OPTION, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true
+mongoose.connect(process.env.BASE_URI + "&" + process.env.URI_OPTION, {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+  useUnifiedTopology: true
 }, (err) => {
-    if (!err) {
-        console.log('MongoDB Connection Succeeded.')
-    } else {
-        console.log('Error in DB connection: ' + err)
-    }
+  if (!err) {
+    console.log('MongoDB Connection Succeeded.')
+  } else {
+    console.log('Error in DB connection: ' + err)
+  }
 });
 
 var cookieSession = require('cookie-session');
@@ -48,7 +49,7 @@ const Hospital = require('./model/hospital');
 
 
 var app = express();
-
+app.use(cors({ credentials: true }))
 
 // set up session cookies
 app.use(cookieSession({
