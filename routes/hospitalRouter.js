@@ -1,7 +1,7 @@
 const bodyParser = require('body-parser');
 var express = require('express');
 const auth = require('../middleware/auth');
-const Hospital = require('../model/hospital');
+const Hospital = require('../model/Hospital');
 var hospitalRouter = express.Router();
 
 hospitalRouter.use(bodyParser.json())
