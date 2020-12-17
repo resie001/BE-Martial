@@ -23,7 +23,8 @@ var patientSchema = new mongoose.Schema({
 });
 
 //Export the model
+const patientModel = mongoose.model('Patient', patientSchema);
 module.exports = {
-    patientModel : mongoose.model('Patient', patientSchema),
+    patientModel : patientModel,
     patientSchema : patientSchema
-};
+}

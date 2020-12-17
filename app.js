@@ -9,7 +9,7 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 //Koneksi ke DB
-mongoose.connect('mongodb+srv://martial:martial123@cluster0.qxzax.mongodb.net/martial?retryWrites=true&w=majority', {
+mongoose.connect('mongodb://127.0.0.1:27017/smortHos', {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
@@ -25,6 +25,7 @@ mongoose.connect('mongodb+srv://martial:martial123@cluster0.qxzax.mongodb.net/ma
 var cookieSession = require('cookie-session');
 var passport = require('passport');
 var Drugs = require("./model/Drug");
+var patientModel = require('./model/Patient')
 var passportSetup = require('./config/passport-setup');
 var keys = require('./config/keys');
 
@@ -37,6 +38,7 @@ var profileRouter = require('./routes/profileRoutes');
 var userRouter = require('./routes/userRouter');
 var recipeRouter = require('./routes/RecipeRouter');
 var transactionRouter = require('./routes/TransactionRouter');
+var patientRouter = require('./routes/patientRouter')
 
 
 
@@ -69,6 +71,7 @@ app.use('/', indexRouter);
 app.use('/drug', drugRouter);
 app.use('/auth', authRouter);
 app.use('/profile', profileRouter);
+app.use('/patient', patientRouter)
 app.use('/users', userRouter);
 app.use('/recipe', recipeRouter);
 app.use('/transaction', transactionRouter);
