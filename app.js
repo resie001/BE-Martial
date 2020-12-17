@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+var cors = require('cors')
 require('dotenv').config()
 // var morgan = require('morgan')
 //Addition - Purusadi
@@ -12,6 +12,7 @@ mongoose.Promise = global.Promise;
 //Koneksi ke DB
 
 mongoose.connect(process.env.BASE_URI+"&"+process.env.URI_OPTION, {
+// mongoose.connect(process.env.TEST_URI, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
@@ -43,12 +44,12 @@ var doctorRouter = require('./routes/DoctorRouter');
 // var hospitalRouter = require('./routes/HospitalRouter');
 var patientRouter = require('./routes/PatientRouter');
 const hospitalRouter = require('./routes/hospitalRouter');
-const Hospital = require('./model/hospital');
+// const Hospital = require('./model/hospital');
 
 
 
 var app = express();
-
+app.use(cors())
 
 // set up session cookies
 app.use(cookieSession({
