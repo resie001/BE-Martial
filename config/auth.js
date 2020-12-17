@@ -24,18 +24,30 @@ const userRegister = async(userDets, role, res) => {
             success: false
         });
     }
+    doctorModel.create(req.body).then((doctor)=>{
+        console.log(doctor);
+        // Get the hashed password
+        const password = await bcrypt.hash(userDets.password, 12);
+        //Create a new user
+        userDets.password = password
+        userDets.data_id = doctor._id
+        const newUser = new User(userDets);
 
-    // Get the hashed password
-    const password = await bcrypt.hash(userDets.password, 12);
-    //Create a new user
-    userDets.password = password
-    const newUser = new User(userDets);
-
-    await newUser.save();
-    return res.status(201).json({
-        message: "Successfully Register",
-        success: true
-    });
+        await newUser.save();
+        return res.status(201).json({
+            message: "Successfully Register",
+            success: true
+        });
+    }).catch((err)=>{
+        console.log(err);
+        res.statusCode = 400
+        res.send({
+            code : 400,
+            msg:"Error : "+err._message,
+            data : null
+        })
+    })  
+    
     }catch (err){
         return res.status(500).json({
             message: "Unable to Register",

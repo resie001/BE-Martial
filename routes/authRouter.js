@@ -40,6 +40,7 @@ authRouter.route('/login')
         res.end('Get operation is not supported')
     })
     .post((req, res) => {
+        
         if (req.body.username === 'admin' && req.body.password === 'admin') {
             var token = jwt.sign({ username: req.body.username, password: req.body.password }, "UK1SbazgQ3yynO3Mg2bgaONSuD5rM0CqIccoUhWqk3NgUqDqQ3GBYCWxZkKsV36z")
             if (token) {
