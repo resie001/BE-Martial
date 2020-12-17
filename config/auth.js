@@ -83,7 +83,7 @@ const userRegister = async(userDets, role, res) => {
     
     // Get the hashed password
     const password = await bcrypt.hash(userDets.password, 12);
-    console.log("msg : "+msg +", data_id : "+data_id);
+    
     //Create a new user
     const newUser = new User({
         email : userDets.email,
