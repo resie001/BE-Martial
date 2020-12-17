@@ -1,6 +1,11 @@
 const bodyParser = require('body-parser');
 var express = require('express');
+<<<<<<< HEAD
 const Hospital = require('../model/Hospital');
+=======
+const auth = require('../middleware/auth');
+const Hospital = require('../model/hospital');
+>>>>>>> 42ea7d5d43a8b091c6fc669be01d0f95484c97ef
 var hospitalRouter = express.Router();
 
 hospitalRouter.use(bodyParser.json())
@@ -8,7 +13,7 @@ hospitalRouter.use(bodyParser.json())
 // Router List Rumah Sakit dengan address '/'
 hospitalRouter.route('/')
   // Ambil List Rumah Sakit
-  .get((req, res) => {
+  .get(auth.isAuth, (req, res) => {
     Hospital.find({}).then((hospitals) => {
       res.status(200)
       res.setHeader('Content-Type', 'application/json')
