@@ -32,6 +32,8 @@
 const bodyParser = require('body-parser');
 var express = require('express');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const userModel = require('../model/User');
 var authRouter = express.Router();
 
 authRouter.route('/login')
@@ -40,32 +42,52 @@ authRouter.route('/login')
         res.end('Get operation is not supported')
     })
     .post((req, res) => {
-        if (req.body.username === 'admin' && req.body.password === 'admin') {
-            var token = jwt.sign({ username: req.body.username, password: req.body.password }, "UK1SbazgQ3yynO3Mg2bgaONSuD5rM0CqIccoUhWqk3NgUqDqQ3GBYCWxZkKsV36z")
-            if (token) {
-                res.status(201)
-                res.setHeader('Content-Type', 'application/json')
-                res.json({
-                    status: 201,
-                    message: 'Login berhasil',
-                    data: token
-                })
-            } else {
-                res.status(401)
-                res.setHeader('Content-Type', 'application/json')
-                res.josn({
-                    status: 401,
-                    message: "Login gagal"
-                })
-            }
-        } else {
-            res.status(404)
+        userModel.findOne({ username: req.body.username }).then((user) => {
+            bcrypt.compare(req.body.password, user.password, ((err, result) => {
+                if (err) {
+                    res.status(err.statusCode)
+                    res.setHeader('Content-Type', 'application/json')
+                    res.json({
+                        status: err.statusCode,
+                        message: err.message.toString()
+                    })
+                }
+                if (result === true) {
+                    var token = jwt.sign({ account: user }, "UK1SbazgQ3yynO3Mg2bgaONSuD5rM0CqIccoUhWqk3NgUqDqQ3GBYCWxZkKsV36z", { expiresIn: 86400 })
+                    if (token) {
+                        res.status(201)
+                        res.setHeader('Content-Type', 'application/json')
+                        res.json({
+                            status: 201,
+                            message: 'Login berhasil',
+                            data: token
+                        })
+                    } else {
+                        res.status(500)
+                        res.setHeader('Content-Type', 'application/json')
+                        res.josn({
+                            status: 500,
+                            message: "Login gagal"
+                        })
+                    }
+                } else {
+                    res.status(204)
+                    res.setHeader('Content-Type', 'application/json')
+                    res.json({
+                        status: 204,
+                        message: 'Password salah'
+                    })
+                }
+
+            }))
+        }).catch((error) => {
+            res.status(204)
             res.setHeader('Content-Type', 'application/json')
-            res.josn({
-                status: 401,
-                message: "username atau password salah"
+            res.json({
+                status: error.statusCode,
+                message: error.message.toString()
             })
-        }
+        })
     })
     .put((req, res) => {
         res.status(403)
