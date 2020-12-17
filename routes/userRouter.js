@@ -7,7 +7,7 @@ userRouter.use(bodyParser.json());
 
 //Users Registration Route
 userRouter.post('/register-user', async (req, res) => {
-    await userRegister(req.body, "user", res);
+    await userRegister(req.body, "pasien", res);
 });
 
 //Dokter Registration Route
