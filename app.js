@@ -4,7 +4,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors')
-
 require('dotenv').config()
 // var morgan = require('morgan')
 //Addition - Purusadi
@@ -12,11 +11,12 @@ var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 //Koneksi ke DB
 
-mongoose.connect(process.env.BASE_URI + "&" + process.env.URI_OPTION, {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-  useUnifiedTopology: true
+mongoose.connect(process.env.BASE_URI+"&"+process.env.URI_OPTION, {
+// mongoose.connect(process.env.TEST_URI, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true
 }, (err) => {
   if (!err) {
     console.log('MongoDB Connection Succeeded.')
@@ -44,7 +44,8 @@ var doctorRouter = require('./routes/DoctorRouter');
 // var hospitalRouter = require('./routes/HospitalRouter');
 var patientRouter = require('./routes/PatientRouter');
 const hospitalRouter = require('./routes/hospitalRouter');
-const Hospital = require('./model/hospital');
+var userRouter = require('./routes/userRouter');
+// const Hospital = require('./model/hospital');
 
 
 

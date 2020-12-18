@@ -64,9 +64,9 @@ authRouter.route('/login')
                             status: 201,
                             message: 'Login berhasil',
                             data: {
-                                role_id: user.data_id,
-                                token: token,
-                                role: user.role
+                                role_id : user.data_id,
+                                token :token,
+                                role : user.role
                             }
                         })
                     } else {

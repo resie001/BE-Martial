@@ -8,7 +8,7 @@ hospitalRouter.use(bodyParser.json())
 
 // Router List Rumah Sakit dengan address '/'
 hospitalRouter.route('/')
-  // Ambil List Rumah Sakit dengan middleware user
+  // Ambil List Rumah Sakit
   .get(auth.isAuth, (req, res) => {
     Hospital.find({}).then((hospitals) => {
       res.status(200)
@@ -27,8 +27,8 @@ hospitalRouter.route('/')
       })
     })
   })
-  // Tambah Rumah Sakit dengan middleware admin
-  .post(auth.isAdmin, (req, res) => {
+  // Tambah Rumah Sakit
+  .post((req, res) => {
     Hospital.create(req.body).then((hospital) => {
       res.status(201)
       res.setHeader('Content-Type', 'application/json')
@@ -59,8 +59,8 @@ hospitalRouter.route('/')
 
 // Router satuan Rumah sakit dengan address '/:hospitalId'
 hospitalRouter.route('/:hospitalId')
-  // Ambil info rumah sakit dengan middleware user
-  .get(auth.isAuth, (req, res) => {
+  // Ambil info rumah sakit
+  .get((req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       res.status(200)
       res.setHeader('Content-Type', 'application/json')
@@ -83,8 +83,8 @@ hospitalRouter.route('/:hospitalId')
     res.status = 404
     res.end('Post operation is not supported')
   })
-  // update rumah sakit dengan middleware admin
-  .put(auth.isAdmin,(req, res) => {
+  // update rumah sakit
+  .put((req, res) => {
     Hospital.findByIdAndUpdate(req.params.hospitalId, { $set: req.body }, { new: true }).then(() => {
       res.status = 201
       res.json({
@@ -100,8 +100,8 @@ hospitalRouter.route('/:hospitalId')
       })
     })
   })
-  // hapus rumah sakit dengan middleware admin
-  .delete(auth.isAdmin,(req, res) => {
+  // hapus rumah sakit
+  .delete((req, res) => {
     Hospital.findByIdAndRemove(req.params.hospitalId).then(() => {
       res.status(200)
       res.josn({
@@ -120,8 +120,7 @@ hospitalRouter.route('/:hospitalId')
 
 // Route Speciality Rumah sakit dengan address '/hospitalId/specialities'
 hospitalRouter.route('/:hospitalId/specialities')
-  // Ambil info spesialis Rumah Sakit dengan middleware user
-  .get(auth.isAuth,(req, res) => {
+  .get((req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       if (hospital.specialities.length != 0) {
         res.status(200)
@@ -144,8 +143,7 @@ hospitalRouter.route('/:hospitalId/specialities')
       })
     })
   })
-  // Menambahkan spesialis Rumah Sakit dengan middleware admin
-  .post(auth.isAdmin,(req, res) => {
+  .post((req, res) => {
     Hospital.findById(req.params.hospitalId, ((error, hospital) => {
       if (error) {
         res.status(error.statusCode)
@@ -174,8 +172,7 @@ hospitalRouter.route('/:hospitalId/specialities')
       }
     }))
   })
-  // Mengupdate salah satu spesialis Rumah Sakit dengan middleware admin
-  .put(auth.isAdmin,(req, res) => {
+  .put((req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       hospital.specialities.pull(req.body.old_speciality)
       hospital.specialities.push(req.body.speciality)
@@ -193,11 +190,17 @@ hospitalRouter.route('/:hospitalId/specialities')
           status: error.statusCode,
           message: error.message.toString()
         })
+      })
+    }).catch((error) => {
+      res.status(error.statusCode)
+      res.setHeader('Content-Type', 'application/json')
+      res.json({
+        status: error.statusCode,
+        message: error.message.toString()
+      })
     })
   })
-  })
-  // Menghapus salah salu spesialis Rumah Sakit dengan middleware admin
-  .delete(auth.isAdmin,(req, res) => {
+  .delete((req, res) => {
     Hospital.findById(req.params.hospitalId, ((error, hospital) => {
       if (error) {
         res.status(error.statusCode)
@@ -216,25 +219,21 @@ hospitalRouter.route('/:hospitalId/specialities')
               status: error.statusCode,
               message: error.message.toString()
             })
-          }
-        }).catch((err)=>{
-            console.log(err);
-            res.statusCode = 400
-            res.send({
-                code : 400,
-                msg:"Error : "+err._message,
-                data : null
+          } else {
+            res.status(200)
+            res.setHeader('Content-Type', 'application/json')
+            res.json({
+              status: 200,
+              message: 'Hapus spesialis Rumah Sakit berhasil'
             })
-          })
-        }
-        }))
-      })
-      
+          }
+        })
+      }
+    }))
+  })
 
-// Route untuk list Rating Rumah Sakit
 hospitalRouter.route('/:hospitalId/ratings')
-  // Ambil list rating Rumah Sakit dengan middleware user
-  .get(auth.isAuth, (req, res) => {
+  .get((req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       if (hospital.ratings.length != 0) {
         res.status(200)
@@ -260,8 +259,7 @@ hospitalRouter.route('/:hospitalId/ratings')
       })
     })
   })
-  // Tambah rating Rumah Sakit dengan middleware user
-  .post(auth.isAuth, (req, res) => {
+  .post((req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       hospital.ratings.push(req.body)
       hospital.save().then(() => {
@@ -281,23 +279,19 @@ hospitalRouter.route('/:hospitalId/ratings')
       })
     })
   })
-  // Method Put tidak support untuk rating Rumah Sakit
   .put((req, res) => {
     res.status(404)
     res.end('Put operation is not supported')
   })
-  // Method Delete tidak support untuk rating Rumah Sakit
   .delete((req, res) => {
     res.status(404)
     res.end('Delete operation is not supported')
   })
 
-// Router untuk satuan rating Rumah Sakit
 hospitalRouter.route('/:hospitalId/ratings/:ratingId')
-  // Ambil salah satu rating Rumah Sakit dengan middleware user
-  .get(auth.isAuth, (req, res) => {
+  .get((req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
-      res.status(200),
+      res.status(200)
       res.setHeader('Content-Type', 'application/json')
       res.json({
         status: 200,
@@ -313,13 +307,11 @@ hospitalRouter.route('/:hospitalId/ratings/:ratingId')
       })
     })
   })
-  // Method Post tidak support untuk satuan rating Rumah Sakit
   .post((req, res) => {
     res.status(404)
     res.end('Post operation is not supported')
   })
-  // Mengupdate salah satu rating Rumah Sakit dengan middleware user
-  .put(auth.isAuth, (req, res) => {
+  .put((req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       hospital.ratings.id(req.params.ratingId).remove()
       hospital.ratings.push(req.body)
@@ -347,8 +339,7 @@ hospitalRouter.route('/:hospitalId/ratings/:ratingId')
       })
     })
   })
-  // Menghapus salah satu rating Rumah Sakit dengan middleware user
-  .delete(auth.isAuth, (req, res) => {
+  .delete((req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       hospital.ratings.id(req.params.ratingId).remove()
       hospital.save().then(() => {
@@ -376,10 +367,8 @@ hospitalRouter.route('/:hospitalId/ratings/:ratingId')
     })
   })
 
-// Route untuk list dokter pada Rumah Sakit
 hospitalRouter.route('/:hospitalId/doctors')
-  // Mengambil list dokter Rumah Sakit dengan middleware user
-  .get(auth.isAuth, (req, res) => {
+  .get((req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       if (hospital.doctors.length != 0) {
         res.status(200)
@@ -405,8 +394,7 @@ hospitalRouter.route('/:hospitalId/doctors')
       })
     })
   })
-  // Menambahkan dokter pada Rumah Sakit dengan middleware dokter
-  .post(auth.isAdmin, (req, res) => {
+  .post((req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       hospital.doctors.push(req.body)
       hospital.save().then(() => {
@@ -433,12 +421,10 @@ hospitalRouter.route('/:hospitalId/doctors')
       })
     })
   })
-  // Method Put tidak supported untuk list dokter Rumah Sakit
   .put((req, res) => {
     res.status(403)
     res.end('Put operation is not supported')
   })
-  // Method Delete tidak supported untuk list dokter rumah sakit
   .delete((req, res) => {
     res.status(403)
     res.end('Delete operation is not supported')
