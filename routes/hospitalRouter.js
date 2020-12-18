@@ -120,6 +120,7 @@ hospitalRouter.route('/:hospitalId')
 
 // Route Speciality Rumah sakit dengan address '/hospitalId/specialities'
 hospitalRouter.route('/:hospitalId/specialities')
+  // Ambil info spesialis Rumah Sakit
   .get((req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       if (hospital.specialities.length != 0) {
@@ -143,6 +144,7 @@ hospitalRouter.route('/:hospitalId/specialities')
       })
     })
   })
+  // Menambahkan spesialis Rumah Sakit
   .post((req, res) => {
     Hospital.findById(req.params.hospitalId, ((error, hospital) => {
       if (error) {
@@ -172,6 +174,7 @@ hospitalRouter.route('/:hospitalId/specialities')
       }
     }))
   })
+  // Mengupdate salah satu spesialis Rumah Sakit
   .put((req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       hospital.specialities.pull(req.body.old_speciality)
@@ -200,6 +203,7 @@ hospitalRouter.route('/:hospitalId/specialities')
       })
     })
   })
+  // Menghapus salah salu spesialis Rumah Sakit
   .delete((req, res) => {
     Hospital.findById(req.params.hospitalId, ((error, hospital) => {
       if (error) {
@@ -232,7 +236,9 @@ hospitalRouter.route('/:hospitalId/specialities')
     }))
   })
 
+// Route untuk list Rating Rumah Sakit
 hospitalRouter.route('/:hospitalId/ratings')
+  // Ambil list rating Rumah Sakit
   .get((req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       if (hospital.ratings.length != 0) {
@@ -259,6 +265,7 @@ hospitalRouter.route('/:hospitalId/ratings')
       })
     })
   })
+  // Tambah rating Rumah Sakit
   .post((req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       hospital.ratings.push(req.body)
@@ -279,16 +286,20 @@ hospitalRouter.route('/:hospitalId/ratings')
       })
     })
   })
+  // Method Put tidak support untuk rating Rumah Sakit
   .put((req, res) => {
     res.status(404)
     res.end('Put operation is not supported')
   })
+  // Method Delete tidak support untuk rating Rumah Sakit
   .delete((req, res) => {
     res.status(404)
     res.end('Delete operation is not supported')
   })
 
+// Router untuk satuan rating Rumah Sakit
 hospitalRouter.route('/:hospitalId/ratings/:ratingId')
+  // Ambil salah satu rating Rumah Sakit
   .get((req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       res.status(200)
@@ -307,10 +318,12 @@ hospitalRouter.route('/:hospitalId/ratings/:ratingId')
       })
     })
   })
+  // Method Post tidak support untuk satuan rating Rumah Sakit
   .post((req, res) => {
     res.status(404)
     res.end('Post operation is not supported')
   })
+  // Mengupdate salah satu rating Rumah Sakit
   .put((req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       hospital.ratings.id(req.params.ratingId).remove()
@@ -339,6 +352,7 @@ hospitalRouter.route('/:hospitalId/ratings/:ratingId')
       })
     })
   })
+  // Menghapus salah satu rating Rumah Sakit
   .delete((req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       hospital.ratings.id(req.params.ratingId).remove()
@@ -367,7 +381,9 @@ hospitalRouter.route('/:hospitalId/ratings/:ratingId')
     })
   })
 
+// Route untuk list dokter pada Rumah Sakit
 hospitalRouter.route('/:hospitalId/doctors')
+  // Mengambil list dokter Rumah Sakit
   .get((req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       if (hospital.doctors.length != 0) {
@@ -394,6 +410,7 @@ hospitalRouter.route('/:hospitalId/doctors')
       })
     })
   })
+  // Menambahkan dokter pada Rumah Sakit
   .post((req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       hospital.doctors.push(req.body)
@@ -421,10 +438,12 @@ hospitalRouter.route('/:hospitalId/doctors')
       })
     })
   })
+  // Method Put tidak supported untuk list dokter Rumah Sakit
   .put((req, res) => {
     res.status(403)
     res.end('Put operation is not supported')
   })
+  // Method Delete tidak supported untuk list dokter rumah sakit
   .delete((req, res) => {
     res.status(403)
     res.end('Delete operation is not supported')

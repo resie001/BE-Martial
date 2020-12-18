@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = {
+    // Middleware untuk mengecek apakah sudah login atau belum
     isAuth: (req, res, next) => {
         try {
             let token = req.headers['x-access-token'] || req.headers['authorization']
@@ -25,6 +26,7 @@ module.exports = {
             });
         }
     },
+    // Middleware untuk mengecek apakah user sudah login atau belum dengan role superadmin
     isAdmin: (req, res, next) => {
         try {
             let token = req.headers['x-access-token'] || req.headers['authorization']
@@ -57,6 +59,7 @@ module.exports = {
             })
         }
     },
+    // Middleware untuk mengecek apakah user sudah login atau belum dengan role superadmin
     isDoctor: (req, res, next) => {
         try {
             let token = req.headers['x-access-token'] || req.headers['authorization']
