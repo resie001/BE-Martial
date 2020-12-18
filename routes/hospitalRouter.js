@@ -8,7 +8,7 @@ hospitalRouter.use(bodyParser.json())
 
 // Router List Rumah Sakit dengan address '/'
 hospitalRouter.route('/')
-  // Ambil List Rumah Sakit
+  // Ambil List Rumah Sakit dengan middleware user
   .get(auth.isAuth, (req, res) => {
     Hospital.find({}).then((hospitals) => {
       res.status(200)
@@ -27,8 +27,8 @@ hospitalRouter.route('/')
       })
     })
   })
-  // Tambah Rumah Sakit
-  .post((req, res) => {
+  // Tambah Rumah Sakit dengan middleware admin
+  .post(auth.isAdmin, (req, res) => {
     Hospital.create(req.body).then((hospital) => {
       res.status(201)
       res.setHeader('Content-Type', 'application/json')
@@ -59,8 +59,8 @@ hospitalRouter.route('/')
 
 // Router satuan Rumah sakit dengan address '/:hospitalId'
 hospitalRouter.route('/:hospitalId')
-  // Ambil info rumah sakit
-  .get((req, res) => {
+  // Ambil info rumah sakit dengan middleware user
+  .get(auth.isAuth, (req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       res.status(200)
       res.setHeader('Content-Type', 'application/json')
@@ -83,8 +83,8 @@ hospitalRouter.route('/:hospitalId')
     res.status = 404
     res.end('Post operation is not supported')
   })
-  // update rumah sakit
-  .put((req, res) => {
+  // update rumah sakit dengan middleware admin
+  .put(auth.isAdmin,(req, res) => {
     Hospital.findByIdAndUpdate(req.params.hospitalId, { $set: req.body }, { new: true }).then(() => {
       res.status = 201
       res.json({
@@ -100,8 +100,8 @@ hospitalRouter.route('/:hospitalId')
       })
     })
   })
-  // hapus rumah sakit
-  .delete((req, res) => {
+  // hapus rumah sakit dengan middleware admin
+  .delete(auth.isAdmin,(req, res) => {
     Hospital.findByIdAndRemove(req.params.hospitalId).then(() => {
       res.status(200)
       res.josn({
@@ -120,8 +120,8 @@ hospitalRouter.route('/:hospitalId')
 
 // Route Speciality Rumah sakit dengan address '/hospitalId/specialities'
 hospitalRouter.route('/:hospitalId/specialities')
-  // Ambil info spesialis Rumah Sakit
-  .get((req, res) => {
+  // Ambil info spesialis Rumah Sakit dengan middleware user
+  .get(auth.isAuth,(req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       if (hospital.specialities.length != 0) {
         res.status(200)
@@ -144,8 +144,8 @@ hospitalRouter.route('/:hospitalId/specialities')
       })
     })
   })
-  // Menambahkan spesialis Rumah Sakit
-  .post((req, res) => {
+  // Menambahkan spesialis Rumah Sakit dengan middleware admin
+  .post(auth.isAdmin,(req, res) => {
     Hospital.findById(req.params.hospitalId, ((error, hospital) => {
       if (error) {
         res.status(error.statusCode)
@@ -174,8 +174,8 @@ hospitalRouter.route('/:hospitalId/specialities')
       }
     }))
   })
-  // Mengupdate salah satu spesialis Rumah Sakit
-  .put((req, res) => {
+  // Mengupdate salah satu spesialis Rumah Sakit dengan middleware admin
+  .put(auth.isAdmin,(req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       hospital.specialities.pull(req.body.old_speciality)
       hospital.specialities.push(req.body.speciality)
@@ -203,8 +203,8 @@ hospitalRouter.route('/:hospitalId/specialities')
       })
     })
   })
-  // Menghapus salah salu spesialis Rumah Sakit
-  .delete((req, res) => {
+  // Menghapus salah salu spesialis Rumah Sakit dengan middleware admin
+  .delete(auth.isAdmin,(req, res) => {
     Hospital.findById(req.params.hospitalId, ((error, hospital) => {
       if (error) {
         res.status(error.statusCode)
@@ -238,8 +238,8 @@ hospitalRouter.route('/:hospitalId/specialities')
 
 // Route untuk list Rating Rumah Sakit
 hospitalRouter.route('/:hospitalId/ratings')
-  // Ambil list rating Rumah Sakit
-  .get((req, res) => {
+  // Ambil list rating Rumah Sakit dengan middleware user
+  .get(auth.isAuth, (req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       if (hospital.ratings.length != 0) {
         res.status(200)
@@ -265,8 +265,8 @@ hospitalRouter.route('/:hospitalId/ratings')
       })
     })
   })
-  // Tambah rating Rumah Sakit
-  .post((req, res) => {
+  // Tambah rating Rumah Sakit dengan middleware user
+  .post(auth.isAuth, (req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       hospital.ratings.push(req.body)
       hospital.save().then(() => {
@@ -299,10 +299,10 @@ hospitalRouter.route('/:hospitalId/ratings')
 
 // Router untuk satuan rating Rumah Sakit
 hospitalRouter.route('/:hospitalId/ratings/:ratingId')
-  // Ambil salah satu rating Rumah Sakit
-  .get((req, res) => {
+  // Ambil salah satu rating Rumah Sakit dengan middleware user
+  .get(auth.isAuth, (req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
-      res.status(200)
+      res.status(200),
       res.setHeader('Content-Type', 'application/json')
       res.json({
         status: 200,
@@ -323,8 +323,8 @@ hospitalRouter.route('/:hospitalId/ratings/:ratingId')
     res.status(404)
     res.end('Post operation is not supported')
   })
-  // Mengupdate salah satu rating Rumah Sakit
-  .put((req, res) => {
+  // Mengupdate salah satu rating Rumah Sakit dengan middleware user
+  .put(auth.isAuth, (req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       hospital.ratings.id(req.params.ratingId).remove()
       hospital.ratings.push(req.body)
@@ -352,8 +352,8 @@ hospitalRouter.route('/:hospitalId/ratings/:ratingId')
       })
     })
   })
-  // Menghapus salah satu rating Rumah Sakit
-  .delete((req, res) => {
+  // Menghapus salah satu rating Rumah Sakit dengan middleware user
+  .delete(auth.isAuth, (req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       hospital.ratings.id(req.params.ratingId).remove()
       hospital.save().then(() => {
@@ -383,8 +383,8 @@ hospitalRouter.route('/:hospitalId/ratings/:ratingId')
 
 // Route untuk list dokter pada Rumah Sakit
 hospitalRouter.route('/:hospitalId/doctors')
-  // Mengambil list dokter Rumah Sakit
-  .get((req, res) => {
+  // Mengambil list dokter Rumah Sakit dengan middleware user
+  .get(auth.isAuth, (req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       if (hospital.doctors.length != 0) {
         res.status(200)
@@ -410,8 +410,8 @@ hospitalRouter.route('/:hospitalId/doctors')
       })
     })
   })
-  // Menambahkan dokter pada Rumah Sakit
-  .post((req, res) => {
+  // Menambahkan dokter pada Rumah Sakit dengan middleware dokter
+  .post(auth.isAdmin, (req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
       hospital.doctors.push(req.body)
       hospital.save().then(() => {
