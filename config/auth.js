@@ -14,7 +14,7 @@ const userRegister = async(userDets, role, res) => {
     if(!usernameNotTaken){
         
         return res.status(400).json({
-            message: "Username is taken!",
+            message: "Username "+userDets.username+" is taken!",
             success: false
         });
     }
@@ -34,7 +34,7 @@ const userRegister = async(userDets, role, res) => {
             let requestDoctorCheck = await validateDoctorRequest(userDets);
             if(!requestDoctorCheck){
                 return res.status(400).json({
-                    message: "Bad Request",
+                    message: "Bad Request : "+err._message,
                     success: false
                 });
             }
@@ -56,7 +56,7 @@ const userRegister = async(userDets, role, res) => {
                 console.log(err);
                 res.statusCode = 400
                 return res.send({
-                    message: "Bad Request",
+                    message: "Bad Request : "+err._message,
                     success: false
                 })
             })  
@@ -65,7 +65,7 @@ const userRegister = async(userDets, role, res) => {
             let requestCheck = await validatePatientRequest(userDets);
             if(!requestCheck){
                 return res.status(400).json({
-                    message: "Bad Request",
+                    message: "Bad Request : "+err._message,
                     success: false
                 });
             }
@@ -85,7 +85,7 @@ const userRegister = async(userDets, role, res) => {
                 msg = "patient"
             }).catch((err)=>{
                 return res.status(400).json({
-                    message: "Bad Request",
+                    message: "Bad Request : "+err._message,
                     success: false
                 });
             })
