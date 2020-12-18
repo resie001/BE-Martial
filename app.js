@@ -18,11 +18,11 @@ mongoose.connect(process.env.TEST_URI, {
     useFindAndModify: false,
     useUnifiedTopology: true
 }, (err) => {
-    if (!err) {
-        console.log('MongoDB Connection Succeeded.')
-    } else {
-        console.log('Error in DB connection: ' + err)
-    }
+  if (!err) {
+    console.log('MongoDB Connection Succeeded.')
+  } else {
+    console.log('Error in DB connection: ' + err)
+  }
 });
 
 var cookieSession = require('cookie-session');
@@ -50,7 +50,7 @@ var userRouter = require('./routes/userRouter');
 
 
 var app = express();
-app.use(cors())
+app.use(cors({ credentials: true }))
 
 // set up session cookies
 app.use(cookieSession({

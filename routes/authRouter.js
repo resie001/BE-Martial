@@ -36,11 +36,14 @@ const bcrypt = require('bcryptjs');
 const userModel = require('../model/User');
 var authRouter = express.Router();
 
+// Route untuk authentifikasi
 authRouter.route('/login')
+    // Method Get tidak supported untuk authentifikasi
     .get((req, res) => {
         res.status(403)
         res.end('Get operation is not supported')
     })
+    // Login dengan username dan password
     .post((req, res) => {
         userModel.findOne({ username: req.body.username }).then((user) => {
             bcrypt.compare(req.body.password, user.password, ((err, result) => {
@@ -93,10 +96,12 @@ authRouter.route('/login')
             })
         })
     })
+    // Method Put tidak supported untuk authentifikasi
     .put((req, res) => {
         res.status(403)
         res.end('Update operation is not supported')
     })
+    // Method Delete tidak supported untuk authentifikasi
     .delete((req, res) => {
         res.status(403)
         res.end('Delete operation is not supported')
