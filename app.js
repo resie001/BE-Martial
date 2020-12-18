@@ -5,27 +5,26 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 
-//Addition - Purusadi
+// koneksi
 var mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
-//Koneksi ke DB
-mongoose.connect('mongodb://127.0.0.1:27017/smortHos', {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true
-}, (err) => {
-    if (!err) {
-        console.log('MongoDB Connection Succeeded.')
-    } else {
-        console.log('Error in DB connection: ' + err)
-    }
-});
+var url = "mongodb://127.0.0.1:27017/smarT";
+var connect = mongoose.connect(url);
+
+// Tangkap hasil koneksi
+connect.then(
+  (db) => {
+    console.log("Koneksi Sukses!");
+  },
+  (err) => {
+    console.log("Terjadi Kegagalan Koneksi");
+  }
+);
+
 
 var cookieSession = require('cookie-session');
 var passport = require('passport');
 var Drugs = require("./model/Drug");
-var patientModel = require('./model/Patient')
+var patientModel = require('./model/Patient') //add
 var passportSetup = require('./config/passport-setup');
 var keys = require('./config/keys');
 
@@ -38,7 +37,7 @@ var profileRouter = require('./routes/profileRoutes');
 var userRouter = require('./routes/userRouter');
 var recipeRouter = require('./routes/RecipeRouter');
 var transactionRouter = require('./routes/TransactionRouter');
-var patientRouter = require('./routes/patientRouter')
+var patientRouter = require('./routes/patientRouter') //add
 
 
 

@@ -21,7 +21,7 @@ var patientSchema = new mongoose.Schema({
     },
     disease_history:[diseaseHisSchema]
 });
-
+// db.patient.insert({"name":"halo", "birth_date":"20-01-1989", "sex":"P", "address":"Jakarta", "disease_history":""})
 //Export the model
 const patientModel = mongoose.model('Patient', patientSchema);
 module.exports = {

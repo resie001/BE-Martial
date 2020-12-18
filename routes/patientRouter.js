@@ -17,7 +17,7 @@ patientRouter.route('/')
     .post((req,res,next)=>{
         patientModel.create(req.body)
          .then((patients)=>{
-           console.log("created", patients)
+           console.log("Berhasil", patients)
            res.statusCode = 200
            res.setHeader('Content-type','application/json')
            res.json(patients)
@@ -28,13 +28,47 @@ patientRouter.route('/')
         res.end('put not suported')
     })
     .delete((req,res,next)=>{
-        patientModel.remove.then((resp)=>{
+        patientModel.remove().then((resp)=>{
             console.log('All dishes deleted')
             res.statusCode = 200
             res.setHeader('Content-type','application/json')
             res.json(resp)
         })
     })
+
+// crud dengan parameter
+patientRouter.route('/:patientId')
+    .get((req, res, next) => {
+        patientModel.findById(req.params.patientId)
+         .then((dish) => {
+            res.statusCode = 200
+            res.setHeader('Content-Type', 'application/json')
+            res.json(dish)
+        })
+    })
+    .post((req, res, next) => {
+        res.statusCode = 403
+        res.end('POST operation is not supported')
+    })
+    .put((req, res, next) => {
+        patientModel.findByIdAndUpdate(req.params.patientId, { $set: req.body }, { new: true })
+        .then((dish) => {
+            console.log('Dish updated', dish)
+            res.statusCode = 200
+            res.setHeader('Content-Type', 'application/json')
+            res.json(dish)
+        })
+    })
+    .delete((req, res, next) => {
+        patientModel.findByIdAndRemove(req.params.patientId)
+        .then((resp) => {
+            console.log('Dish removed', resp)
+            res.statusCode = 200
+            res.setHeader('Content-Type', 'application/json')
+            res.json(resp)
+        })
+    })
+
 
 
 module.exports = patientRouter
