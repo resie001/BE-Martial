@@ -88,20 +88,12 @@ authRouter.route('/login')
 
             }))
         }).catch((error) => {
-<<<<<<< HEAD
             // console.log(error);
             res.status(400)
             res.setHeader('Content-Type', 'application/json')
             res.json({
                 status: 400,
                 message: "User is not registered"
-=======
-            res.status(404)
-            res.setHeader('Content-Type', 'application/json')
-            res.json({
-                status: 404,
-                message: error.message.toString()
->>>>>>> 83a330cf6498debfc243894ba927b266dfca4e07
             })
         })
     })
