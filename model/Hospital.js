@@ -18,7 +18,7 @@ var hospitalSchema = new Schema({
     },
     specialities: [String],
     ratings: [ratingSchema],
-    doctors: [doctorSchema]
+    doctorsHospital: [doctorSchema]
 }, {
     timestamps: true
 })

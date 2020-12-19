@@ -48,10 +48,10 @@ authRouter.route('/login')
         userModel.findOne({ username: req.body.username }).then((user) => {
             bcrypt.compare(req.body.password, user.password, ((err, result) => {
                 if (err) {
-                    res.status(err.statusCode)
+                    res.status(404)
                     res.setHeader('Content-Type', 'application/json')
                     res.json({
-                        status: err.statusCode,
+                        status: 404,
                         message: err.message.toString()
                     })
                 }
@@ -64,9 +64,9 @@ authRouter.route('/login')
                             status: 201,
                             message: 'Login berhasil',
                             data: {
-                                role_id : user.data_id,
-                                token :token,
-                                role : user.role
+                                role_id: user.data_id,
+                                token: token,
+                                role: user.role
                             }
                         })
                     } else {
@@ -78,10 +78,10 @@ authRouter.route('/login')
                         })
                     }
                 } else {
-                    res.status(204)
+                    res.status(404)
                     res.setHeader('Content-Type', 'application/json')
                     res.json({
-                        status: 204,
+                        status: 404,
                         message: 'Password salah'
                     })
                 }

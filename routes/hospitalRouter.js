@@ -19,10 +19,10 @@ hospitalRouter.route('/')
         data: hospitals
       })
     }).catch((error) => {
-      res.status(error.statusCode)
+      res.status(400)
       res.setHeader('Content-Type', 'application/json')
       res.json({
-        status: error.statusCode,
+        status: 400,
         message: error.message.toString()
       })
     })
@@ -38,10 +38,10 @@ hospitalRouter.route('/')
         data: hospital
       })
     }).catch((error) => {
-      res.status(error.statusCode)
+      res.status(400)
       res.setHeader('Content-Type', 'application/json')
       res.json({
-        status: error.statusCode,
+        status: 400,
         message: error.message.toString()
       })
     })
@@ -70,10 +70,10 @@ hospitalRouter.route('/:hospitalId')
         data: hospital
       })
     }).catch((error) => {
-      res.status(error.statusCode)
+      res.status(400)
       res.setHeader('Content-Type', 'application/json')
       res.json({
-        status: error.statusCode,
+        status: 400,
         message: error.message.toString()
       })
     })
@@ -92,10 +92,10 @@ hospitalRouter.route('/:hospitalId')
         message: "Update Rumah Sakit berhasil"
       })
     }).catch((error) => {
-      res.status(error.statusCode)
+      res.status(400)
       res.setHeader('Content-Type', 'application/json')
       res.json({
-        status: error.statusCode,
+        status: 400,
         message: error.message.toString()
       })
     })
@@ -109,10 +109,10 @@ hospitalRouter.route('/:hospitalId')
         message: 'Hapus Rumah Sakit berhasil'
       })
     }).catch((error) => {
-      res.status(error.statusCode)
+      res.status(400)
       res.setHeader('Content-Type', 'application/json')
       res.json({
-        status: error.statusCode,
+        status: 400,
         message: error.message.toString()
       })
     })
@@ -132,14 +132,18 @@ hospitalRouter.route('/:hospitalId/specialities')
           data: hospital.specialities
         })
       } else {
-        res.status(204)
-        res.end("Speciality tidak ada")
+        res.status(404)
+        res.setHeader('Content-Type', 'application/json')
+        res.json({
+          status: 404,
+          message: 'Spesialis belum ditambahkan'
+        })
       }
     }).catch((error) => {
-      res.status(error.statusCode)
+      res.status(400)
       res.setHeader('Content-Type', 'application/json')
       res.json({
-        status: error.statusCode,
+        status: 400,
         message: error.message.toString()
       })
     })
@@ -148,17 +152,20 @@ hospitalRouter.route('/:hospitalId/specialities')
   .post(auth.isAdmin,(req, res) => {
     Hospital.findById(req.params.hospitalId, ((error, hospital) => {
       if (error) {
-        res.status(error.statusCode)
+        res.status(400)
         res.setHeader('Content-Type', 'application/json')
-        res.end(error.message.toString())
+        res.json({
+          status: 400,
+          message: error.message.toString()
+        })
       } else {
         hospital.specialities.push(req.body.speciality)
         hospital.save((err, speciality) => {
           if (err) {
-            res.status(error.statusCode)
+            res.status(400)
             res.setHeader('Content-Type', 'application/json')
             res.json({
-              status: error.statusCode,
+              status: 400,
               message: error.message.toString()
             })
           } else {
@@ -187,10 +194,10 @@ hospitalRouter.route('/:hospitalId/specialities')
           message: 'Update spesialis Rumah Sakit berhasil'
         })
       }).catch((error) => {
-        res.status(error.statusCode)
+        res.status(400)
         res.setHeader('Content-Type', 'application/json')
         res.json({
-          status: error.statusCode,
+          status: 400,
           message: error.message.toString()
         })
     })
@@ -200,20 +207,20 @@ hospitalRouter.route('/:hospitalId/specialities')
   .delete(auth.isAdmin,(req, res) => {
     Hospital.findById(req.params.hospitalId, ((error, hospital) => {
       if (error) {
-        res.status(error.statusCode)
+        res.status(400)
         res.setHeader('Content-Type', 'application/json')
         res.json({
-          status: error.statusCode,
+          status: 400,
           message: error.message.toString()
         })
       } else {
         hospital.specialities.pull(req.body.speciality)
         hospital.save((error, speciality) => {
           if (error) {
-            res.status(error.statusCode)
+            res.status(400)
             res.setHeader('Content-Type', 'application/json')
             res.json({
-              status: error.statusCode,
+              status: 400,
               message: error.message.toString()
             })
           }
@@ -245,17 +252,18 @@ hospitalRouter.route('/:hospitalId/ratings')
           data: hospital.ratings
         })
       } else {
-        res.status(204)
+        res.status(404)
+        res.setHeader('Content-Type', 'application/json')
         res.json({
-          status: 204,
+          status: 404,
           message: 'Rating Rumah Sakit masih kosong'
         })
       }
     }).catch((error) => {
-      res.status(error.statusCode)
+      res.status(400)
       res.setHeader('Content-Type', 'application/json')
       res.json({
-        status: error.statusCode,
+        status: 400,
         message: error.message.toString()
       })
     })
@@ -272,10 +280,10 @@ hospitalRouter.route('/:hospitalId/ratings')
           message: 'Tambah rating Rumah Sakit berhasil'
         })
       }).catch((error) => {
-        res.status(error.statusCode)
+        res.status(400)
         res.setHeader('Content-Type', 'application/json')
         res.json({
-          status: error.statusCode,
+          status: 400,
           message: error.message.toString()
         })
       })
@@ -305,10 +313,10 @@ hospitalRouter.route('/:hospitalId/ratings/:ratingId')
         data: hospital.ratings.id(req.params.ratingId)
       })
     }).catch((error) => {
-      res.status(error.statusCode)
+      res.status(400)
       res.setHeader('Content-Type', 'application/json')
       res.json({
-        status: error.statusCode,
+        status: 400,
         message: error.message.toString()
       })
     })
@@ -331,18 +339,18 @@ hospitalRouter.route('/:hospitalId/ratings/:ratingId')
           message: 'Update Rating berhasil'
         })
       }).catch((error) => {
-        res.status(error.statusCode)
+        res.status(400)
         res.setHeader('Content-Type', 'application/json')
         res.json({
-          status: error.statusCode,
+          status: 400,
           message: error.message.toString()
         })
       })
     }).catch((error) => {
-      res.status(error.statusCode)
+      res.status(400)
       res.setHeader('Content-Type', 'application/json')
       res.json({
-        status: error.statusCode,
+        status: 400,
         message: error.message.toString()
       })
     })
@@ -359,18 +367,18 @@ hospitalRouter.route('/:hospitalId/ratings/:ratingId')
           message:'Hapus rating Rumah Sakit berhasil'
         })
       }).catch((error) => {
-        res.status(error.statusCode)
+        res.status(400)
         res.setHeader('Content-Type', 'application/json')
         res.json({
-          status: error.statusCode,
+          status: 400,
           message: error.message.toString()
         })
       })
     }).catch((error) => {
-      res.status(error.statusCode)
+      res.status(400)
       res.setHeader('Content-Type', 'application/json')
       res.json({
-        status: error.statusCode,
+        status: 400,
         message: error.message.toString()
       })
     })
@@ -381,26 +389,27 @@ hospitalRouter.route('/:hospitalId/doctors')
   // Mengambil list dokter Rumah Sakit dengan middleware user
   .get(auth.isAuth, (req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
-      if (hospital.doctors.length != 0) {
+      if (hospital.doctorsHospital.length != 0) {
         res.status(200)
         res.setHeader('Content-Type', 'application/json')
         res.json({
           status:200,
           message:'Ambil list dokter Rumah Sakit berhasil',
-          data:hospital.doctors
+          data:hospital.doctorsHospital
         })
       } else {
-        res.status(204)
+        res.status(404)
+        res.setHeader('Content-Type', 'application/json')
         res.json({
-          status:204,
+          status:404,
           message:'List dokter Rumah Sakit kosong'
         })
       }
     }).catch((error) => {
-      res.status(error.statusCode)
+      res.status(400)
       res.setHeader('Content-Type', 'application/json')
       res.json({
-        status: error.statusCode,
+        status: 400,
         message: error.message.toString()
       })
     })
@@ -408,7 +417,7 @@ hospitalRouter.route('/:hospitalId/doctors')
   // Menambahkan dokter pada Rumah Sakit dengan middleware dokter
   .post(auth.isAdmin, (req, res) => {
     Hospital.findById(req.params.hospitalId).then((hospital) => {
-      hospital.doctors.push(req.body)
+      hospital.doctorsHospital.push(req.body)
       hospital.save().then(() => {
         res.status(200)
         res.setHeader('Content-Type', 'application/json')
@@ -417,18 +426,18 @@ hospitalRouter.route('/:hospitalId/doctors')
           message:'Tambah dokter Rumah Sakit berhasil'
         })
       }).catch((error) => {
-        res.status(error.statusCode)
+        res.status(400)
         res.setHeader('Content-Type', 'application/json')
         res.json({
-          status: error.statusCode,
+          status: 400,
           message: error.message.toString()
         })
       })
     }).catch((error) => {
-      res.status(error.statusCode)
+      res.status(400)
       res.setHeader('Content-Type', 'application/json')
       res.json({
-        status: error.statusCode,
+        status: 400,
         message: error.message.toString()
       })
     })
