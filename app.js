@@ -11,8 +11,8 @@ var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 //Koneksi ke DB
 
-mongoose.connect(process.env.BASE_URI+"&"+process.env.URI_OPTION, {
-// mongoose.connect(process.env.TEST_URI, {
+// mongoose.connect(process.env.BASE_URI+"&"+process.env.URI_OPTION, {
+mongoose.connect(process.env.TEST_URI, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
@@ -46,6 +46,7 @@ var patientRouter = require('./routes/PatientRouter');
 const hospitalRouter = require('./routes/hospitalRouter');
 var userRouter = require('./routes/userRouter');
 // const Hospital = require('./model/hospital');
+var exploreRouter = require('./routes/exploreRouter');
 
 
 
@@ -87,6 +88,7 @@ app.use('/doctor', doctorRouter);
 // app.use('/hospital', hospitalRouter);
 app.use('/hospitals', hospitalRouter)
 app.use('/patient', patientRouter);
+app.use('/explore', exploreRouter);
 
 
 // catch 404 and forward to error handler
