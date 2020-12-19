@@ -37,7 +37,7 @@ module.exports = {
             if (token) {
                 var decoded = jwt.verify(token, "UK1SbazgQ3yynO3Mg2bgaONSuD5rM0CqIccoUhWqk3NgUqDqQ3GBYCWxZkKsV36z");
                 req.account = decoded;
-                if (req.account.role === 'superadmin') {
+                if (decoded.account.role === 'superadmin') {
                     next()
                 } else {
                     res.status(403)
@@ -70,7 +70,7 @@ module.exports = {
             if (token) {
                 var decoded = jwt.verify(token, "UK1SbazgQ3yynO3Mg2bgaONSuD5rM0CqIccoUhWqk3NgUqDqQ3GBYCWxZkKsV36z");
                 req.account = decoded;
-                if (req.account.role === 'dokter' || req.account.role === 'superadmin') {
+                if (decoded.account.role === 'dokter' || decoded.account.role === 'superadmin') {
                     next()
                 } else {
                     res.status(403)
